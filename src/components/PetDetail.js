@@ -1,8 +1,28 @@
 import React from "react";
 import petsData from "../petsData";
 import { useParams } from "react-router-dom";
+import {destroy,get}from "../api/pets";
+import petsData from "../petsData";
+
 const PetDetail = () => {
   const { id } = useParams();
+
+  const response = useQuery({
+    queryKey:["test2"],
+    queryFn:()=>get(id),
+  });
+
+  const deletMutation =useMutation({
+    mutationFn:()=> destroy(id),
+  });
+
+  function destroy(){
+    deleteMutation.mutate(id);
+  }
+
+console.log(response.data?.data);
+ 
+ 
   const pet = petsData[0];
   return (
     <div className="bg-[#F9E3BE] w-screen h-[100vh] flex justify-center items-center">
@@ -23,7 +43,8 @@ const PetDetail = () => {
             Adobt
           </button>
 
-          <button className="w-[70px] border border-black rounded-md  hover:bg-red-400">
+          <button onClick={destroy.mutate}
+           className="w-[70px] border border-black rounded-md  hover:bg-red-400">
             Delete
           </button>
         </div>
